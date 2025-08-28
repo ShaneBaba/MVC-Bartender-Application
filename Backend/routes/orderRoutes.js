@@ -3,8 +3,8 @@ import { listOrders, createOrderHandler, markReadyHandler } from '../controllers
 
 const router = express.Router();
 
-router.get('/', listOrders);            // bartender views queue
-router.post('/', createOrderHandler);   // patron places order
-router.post('/:id/ready', markReadyHandler); // bartender marks ready
+router.get('/', listOrders);            
+router.post('/', createOrderHandler);   
+router.post('/:id/ready', markReadyHandler); 
 
 export default router;

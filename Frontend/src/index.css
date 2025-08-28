@@ -1,68 +1,132 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* ===== Base (yours, kept) ===== */
+.container{max-width:900px;margin:2rem auto;padding:0 1rem}
+header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+nav a{margin-right:1rem;text-decoration:none}
+.cards{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.card{border:1px solid #ddd;border-radius:10px;padding:1rem}
+.table{width:100%;border-collapse:collapse;margin-top:1rem}
+.table th,.table td{border:1px solid #ddd;padding:.5rem;text-align:left}
+.msg{color:#0a7}.error{color:#c00}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* ===== Aurora Borealis Themes (Menu = teal/green, Queue = teal/purple) ===== */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+/* Night-sky base for both themed pages */
+body.theme-menu,
+body.theme-queue {
+  color: #eaf7ff;
+  background: linear-gradient(120deg, #071b2c 0%, #0a2233 45%, #0b1e2f 100%);
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Layout + glass effect (reuse across pages) */
+.page { min-height: 100vh; padding: 2rem 1rem; }
+.container { max-width: 900px; margin: 0 auto; } /* keep your 900px width */
+.glass {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* Cards & tables reuse glass */
+.cards { list-style: none; padding: 0; display: grid; gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.card { padding: 1rem; }
+.table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.table th, .table td { padding: .65rem .75rem; }
+.table.glass th, .table.glass td { border-bottom: 1px solid rgba(255,255,255,0.18); }
+
+/* Animated aurora “light curtains” using blurred radial gradients */
+body.theme-menu::before,
+body.theme-menu::after,
+body.theme-queue::before,
+body.theme-queue::after {
+  content: "";
+  position: fixed;
+  inset: -10% -10%;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  filter: blur(26px) saturate(115%);
+  animation: aurora-drift 22s ease-in-out infinite alternate;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* MENU: teal/green with a hint of cyan */
+body.theme-menu::before {
+  background:
+    radial-gradient(50% 70% at 15% 25%, rgba(47,211,159,0.35), transparent 60%),
+    radial-gradient(45% 60% at 75% 30%, rgba(14,197,224,0.28), transparent 60%),
+    radial-gradient(55% 65% at 55% 80%, rgba(13,148,136,0.30), transparent 60%);
 }
+body.theme-menu::after {
+  background:
+    radial-gradient(38% 55% at 30% 70%, rgba(36,200,165,0.22), transparent 60%),
+    radial-gradient(35% 50% at 85% 55%, rgba(0,212,255,0.18), transparent 60%);
+  animation-duration: 28s;
+}
+
+/* QUEUE: teal/purple with a soft magenta accent */
+body.theme-queue::before {
+  background:
+    radial-gradient(50% 70% at 20% 25%, rgba(47,211,159,0.30), transparent 60%),
+    radial-gradient(45% 60% at 70% 35%, rgba(160,115,255,0.28), transparent 60%),
+    radial-gradient(55% 65% at 55% 80%, rgba(255,122,217,0.18), transparent 60%);
+}
+body.theme-queue::after {
+  background:
+    radial-gradient(40% 60% at 30% 70%, rgba(121,221,199,0.20), transparent 60%),
+    radial-gradient(40% 55% at 85% 60%, rgba(109,40,217,0.20), transparent 60%);
+  animation-duration: 26s;
+}
+
+/* Gentle vertical float */
+@keyframes aurora-drift {
+  0%   { transform: translateY(-1.5%) translateX(0%);   opacity: 0.9; }
+  50%  { transform: translateY(1.5%)  translateX(1%);   opacity: 1;   }
+  100% { transform: translateY(2.5%)  translateX(-1%);  opacity: 0.9; }
+}
+
+/* Buttons tuned for each theme */
+button { padding: .6rem 1rem; border-radius: 10px; border: 0; cursor: pointer; transition: transform .05s ease, filter .15s ease; }
+button:active { transform: translateY(1px); }
+
+body.theme-menu button {
+  background: linear-gradient(135deg, #34e7d9, #0ec7e0);
+  color: #05252a;
+}
+body.theme-queue button {
+  background: linear-gradient(135deg, #c4b5fd, #9a6bff);
+  color: #20114a;
+}
+body.theme-menu button:hover,
+body.theme-queue button:hover { filter: brightness(0.93); }
+
+/* ===== Header + nav overrides (centered header) ===== */
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+.app-header.hero { min-height: 60vh; }
+
+/* Default (no theme): dark title + links */
+.app-header h1 { color: #111; margin: 0; letter-spacing: .3px; }
+.app-nav a, .app-nav a:visited { color: #222; }
+.app-nav a:hover { text-decoration: underline; }
+
+/* Themed pages (aurora): white title + links */
+body.theme-menu .app-header h1,
+body.theme-queue .app-header h1 { color: #fff; }
+
+body.theme-menu .app-nav a,
+body.theme-queue .app-nav a,
+body.theme-menu .app-nav a:visited,
+body.theme-queue .app-nav a:visited { color: #fff; }
